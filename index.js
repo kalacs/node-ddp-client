@@ -70,11 +70,16 @@ var DDPClient = function (_EventEmitter) {
       var self = this;
       self.socket.onopen = function () {
         // just go ahead and open the connection on connect
-        self._send({
-          msg: "connect",
-          version: self.ddpVersion,
-          support: self.supportedDdpVersions
-        });
+        var data = {
+          msg : "connect",
+          version : self.ddpVersion,
+          support : self.supportedDdpVersions
+        };
+
+        if(self.session)
+          data['session'] = self.session;
+
+        self._send(data);
       };
 
       self.socket.onerror = function (error) {
