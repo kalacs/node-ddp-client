@@ -43,6 +43,7 @@ var DDPClient = function (_EventEmitter) {
 
     // support multiple ddp versions
     self.ddpVersion = "ddpVersion" in opts ? opts.ddpVersion : "1";
+    self.session = ("session" in opts) ? opts.session : null;
     self.supportedDdpVersions = ["1", "pre2", "pre1"];
 
     // Expose EJSON object, so client can use EJSON.addType(...)
