@@ -1,6 +1,6 @@
 {
   "name": "evista-ddp-client",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "DDP Client for browsers and native JS runtimes (no dependencies on document or 3rd party WebSocket libraries)",
   "main": "index.js",
   "repository": {
