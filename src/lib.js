@@ -35,6 +35,7 @@ class DDPClient extends EventEmitter{
 
     // support multiple ddp versions
     self.ddpVersion = ("ddpVersion" in opts) ? opts.ddpVersion : "1";
+    self.session = ("session" in opts) ? opts.session : null;
     self.supportedDdpVersions = ["1", "pre2", "pre1"];
 
     // Expose EJSON object, so client can use EJSON.addType(...)
@@ -59,11 +60,16 @@ class DDPClient extends EventEmitter{
     var self = this;
     self.socket.onopen = function() {
       // just go ahead and open the connection on connect
-      self._send({
+      var data = {
         msg : "connect",
         version : self.ddpVersion,
         support : self.supportedDdpVersions
-      });
+      };
+
+      if(self.session)
+        data['session'] = self.session;
+
+      self._send(data);
     };
 
     self.socket.onerror = function(error) {
