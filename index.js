@@ -71,16 +71,11 @@ var DDPClient = function (_EventEmitter) {
       var self = this;
       self.socket.onopen = function () {
         // just go ahead and open the connection on connect
-        var data = {
+        self._send({
           msg : "connect",
           version : self.ddpVersion,
           support : self.supportedDdpVersions
-        };
-
-        if(self.session)
-          data['session'] = self.session;
-
-        self._send(data);
+        });
       };
 
       self.socket.onerror = function (error) {
@@ -132,6 +127,10 @@ var DDPClient = function (_EventEmitter) {
     key: '_send',
     value: function _send(data) {
       var self = this;
+
+      if(self.session)
+        data['session'] = self.session;
+
       self.socket.send(EJSON.stringify(data));
     }
 
@@ -157,7 +156,7 @@ var DDPClient = function (_EventEmitter) {
           self.emit("failed", "Cannot negotiate DDP version");
         }
       } else if (data.msg === "connected") {
-        self.session = data.session;
+        self.session = (self.session) ? self.session : data.session;
         self.emit("connected");
 
         // method result
