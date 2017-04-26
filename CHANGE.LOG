@@ -1,2 +1,4 @@
+2017-04-26:
+- feature: improve session management
 2017-04-25:
-- expose session field which received from server
+- feature: expose session field which received from server
