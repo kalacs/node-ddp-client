@@ -60,16 +60,11 @@ class DDPClient extends EventEmitter{
     var self = this;
     self.socket.onopen = function() {
       // just go ahead and open the connection on connect
-      var data = {
+      self._send({
         msg : "connect",
         version : self.ddpVersion,
         support : self.supportedDdpVersions
-      };
-
-      if(self.session)
-        data['session'] = self.session;
-
-      self._send(data);
+      });
     };
 
     self.socket.onerror = function(error) {
@@ -114,6 +109,10 @@ class DDPClient extends EventEmitter{
   // RAW, low level functions
   _send(data) {
     var self = this;
+
+    if(self.session)
+      data['session'] = self.session;
+
     self.socket.send(
       EJSON.stringify(data)
     );
@@ -140,7 +139,7 @@ class DDPClient extends EventEmitter{
       }
 
     } else if (data.msg === "connected") {
-      self.session = data.session;
+      self.session = (self.session) ? self.session : data.session;
       self.emit("connected");
 
     // method result
